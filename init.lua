@@ -194,6 +194,23 @@ vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right win
 vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
 
+--vim.keymap.set({ "n", "v" }, "<Space>", "<Nop>")
+
+--vim.keymap.set("t", "<Esc>", "<C-\\><C-n>")
+--vim.keymap.set("t", "<C-w>", "<C-\\><C-n><C-w>")
+
+local powershell_options = {
+  shell = vim.fn.executable("pwsh") == 1 and "pwsh" or "powershell",
+  shellcmdflag = "-NoLogo -NoProfile -ExecutionPolicy RemoteSigned -Command [Console]::InputEncoding=[Console]::OutputEncoding=[System.Text.Encoding]::UTF8;",
+  shellredir = "-RedirectStandardOutput %s -NoNewWindow -Wait",
+  shellpipe = "2>&1 | Out-File -Encoding UTF8 %s; exit $LastExitCode",
+  shellquote = "",
+  shellxquote = "",
+}
+for option, value in pairs(powershell_options) do
+  vim.opt[option] = value
+end
+
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
 
@@ -931,6 +948,7 @@ require('lazy').setup({
       -- - sd'   - [S]urround [D]elete [']quotes
       -- - sr)'  - [S]urround [R]eplace [)] [']
       require('mini.surround').setup()
+      require('mini.comment').setup()
 
       -- Simple and easy statusline.
       --  You could remove this setup call if you don't like it,
@@ -1022,6 +1040,29 @@ require('lazy').setup({
       task = '📌',
       lazy = '💤 ',
     },
+  },
+},
+  {
+    "mfussenegger/nvim-dap-python",
+    dependencies = { "mfussenegger/nvim-dap" },
+    event = "VeryLazy",
+    config = function()
+      require("dap-python").setup(".venv/Scripts/python")
+    end,
+    keys = {
+      { "<leader>ld", ":lua require('dap-python').test_method()<cr>",          desc = "Debug method" },
+      { "<leader>df", ":lua require('dap-python').test_class()<cr>",           desc = "Debug class" },
+      { "<leader>ds", "<esc>:lua require('dap-python').debug_selection()<cr>", desc = "Debug selection" },
+    },
+  },
+  {
+    "ellisonleao/dotenv.nvim",
+    config = function()
+      require('dotenv').setup({
+        enable_on_load = true, -- will load your .env file upon loading a buffer
+        verbose = false,       -- show error notification if .env file is not found and if .env is loaded
+      })
+    end,
   },
 })
 
