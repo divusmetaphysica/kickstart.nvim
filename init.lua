@@ -200,12 +200,12 @@ vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper win
 --vim.keymap.set("t", "<C-w>", "<C-\\><C-n><C-w>")
 
 local powershell_options = {
-  shell = vim.fn.executable("pwsh") == 1 and "pwsh" or "powershell",
-  shellcmdflag = "-NoLogo -NoProfile -ExecutionPolicy RemoteSigned -Command [Console]::InputEncoding=[Console]::OutputEncoding=[System.Text.Encoding]::UTF8;",
-  shellredir = "-RedirectStandardOutput %s -NoNewWindow -Wait",
-  shellpipe = "2>&1 | Out-File -Encoding UTF8 %s; exit $LastExitCode",
-  shellquote = "",
-  shellxquote = "",
+  shell = vim.fn.executable 'pwsh' == 1 and 'pwsh' or 'powershell',
+  shellcmdflag = '-NoLogo -NoProfile -ExecutionPolicy RemoteSigned -Command [Console]::InputEncoding=[Console]::OutputEncoding=[System.Text.Encoding]::UTF8;',
+  shellredir = '-RedirectStandardOutput %s -NoNewWindow -Wait',
+  shellpipe = '2>&1 | Out-File -Encoding UTF8 %s; exit $LastExitCode',
+  shellquote = '',
+  shellxquote = '',
 }
 for option, value in pairs(powershell_options) do
   vim.opt[option] = value
@@ -994,6 +994,28 @@ require('lazy').setup({
     --    - Show your current context: https://github.com/nvim-treesitter/nvim-treesitter-context
     --    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
   },
+  {
+    'mfussenegger/nvim-dap-python',
+    dependencies = { 'mfussenegger/nvim-dap' },
+    event = 'VeryLazy',
+    config = function()
+      require('dap-python').setup '.venv/Scripts/python'
+    end,
+    keys = {
+      { '<leader>ld', ":lua require('dap-python').test_method()<cr>", desc = 'Debug method' },
+      { '<leader>df', ":lua require('dap-python').test_class()<cr>", desc = 'Debug class' },
+      { '<leader>ds', "<esc>:lua require('dap-python').debug_selection()<cr>", desc = 'Debug selection' },
+    },
+  },
+  {
+    'ellisonleao/dotenv.nvim',
+    config = function()
+      require('dotenv').setup {
+        enable_on_load = true, -- will load your .env file upon loading a buffer
+        verbose = false, -- show error notification if .env file is not found and if .env is loaded
+      }
+    end,
+  },
 
   -- The following comments only work if you have downloaded the kickstart repo, not just copy pasted the
   -- init.lua. If you want these files, they are in the repository, so you can just download them and
@@ -1040,29 +1062,6 @@ require('lazy').setup({
       task = '📌',
       lazy = '💤 ',
     },
-  },
-},
-  {
-    "mfussenegger/nvim-dap-python",
-    dependencies = { "mfussenegger/nvim-dap" },
-    event = "VeryLazy",
-    config = function()
-      require("dap-python").setup(".venv/Scripts/python")
-    end,
-    keys = {
-      { "<leader>ld", ":lua require('dap-python').test_method()<cr>",          desc = "Debug method" },
-      { "<leader>df", ":lua require('dap-python').test_class()<cr>",           desc = "Debug class" },
-      { "<leader>ds", "<esc>:lua require('dap-python').debug_selection()<cr>", desc = "Debug selection" },
-    },
-  },
-  {
-    "ellisonleao/dotenv.nvim",
-    config = function()
-      require('dotenv').setup({
-        enable_on_load = true, -- will load your .env file upon loading a buffer
-        verbose = false,       -- show error notification if .env file is not found and if .env is loaded
-      })
-    end,
   },
 })
 
