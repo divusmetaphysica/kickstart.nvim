@@ -995,19 +995,6 @@ require('lazy').setup({
     --    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
   },
   {
-    'mfussenegger/nvim-dap-python',
-    dependencies = { 'mfussenegger/nvim-dap' },
-    event = 'VeryLazy',
-    config = function()
-      require('dap-python').setup '.venv/Scripts/python'
-    end,
-    keys = {
-      { '<leader>ld', ":lua require('dap-python').test_method()<cr>", desc = 'Debug method' },
-      { '<leader>df', ":lua require('dap-python').test_class()<cr>", desc = 'Debug class' },
-      { '<leader>ds', "<esc>:lua require('dap-python').debug_selection()<cr>", desc = 'Debug selection' },
-    },
-  },
-  {
     'ellisonleao/dotenv.nvim',
     config = function()
       require('dotenv').setup {
@@ -1026,11 +1013,11 @@ require('lazy').setup({
   --  Here are some example plugins that I've included in the Kickstart repository.
   --  Uncomment any of the lines below to enable them (you will need to restart nvim).
   --
-  -- require 'kickstart.plugins.debug',
-  -- require 'kickstart.plugins.indent_line',
-  -- require 'kickstart.plugins.lint',
+  require 'kickstart.plugins.debug',
+  require 'kickstart.plugins.indent_line',
+  ----  require 'kickstart.plugins.lint',
   -- require 'kickstart.plugins.autopairs',
-  -- require 'kickstart.plugins.neo-tree',
+  require 'kickstart.plugins.neo-tree',
   -- require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
 
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
